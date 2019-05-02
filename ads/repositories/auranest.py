@@ -68,7 +68,7 @@ def _parse_args(args):
     if(args[settings.SHOW_EXPIRED]=='false'):
         query_dsl['query']['bool']['filter'] = \
            [{'bool': {'must_not': {'exists': {'field': 'source.removedAt'}}}}]
-    #TODO: Filter on deadline show or not show (en växel)
+    #TODO: Filter on 'deadline' show or not show (en växel)
     # Check for empty query
     if not any(v is not None for v in args.values()):
         log.debug("Constructing match-all query")
