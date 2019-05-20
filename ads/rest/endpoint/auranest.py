@@ -6,6 +6,7 @@ from ads.rest.model.auranest_results import auranest_lista
 from ads.apiresources import geokomp
 import requests
 
+
 @ns_alljobs.route('search')
 class AllJobsSearch(Resource):
     @ns_alljobs.doc(description='Search with freetext query')
@@ -28,6 +29,21 @@ class AllJobsSearch(Resource):
     def marshal_default(self, results):
         return results
 
+
 @ns_skillsandtraits.route('skills')
 class SkillsAndTraitsSearch(Resource):
-    pass
+    @ns_skillsandtraits.doc(description='Search skills and traits for a specific job')
+    @ns_skillsandtraits.expect(queries.skillsandtraits_query)
+    def get(self):
+        args = queries.skillsandtraits_query.parse_args()
+        query_result = auranestRepro.findAds(args)
+        for ad in query_result['hits']['hits']:
+            if ad['_source']['skills']:
+                auranestRepro.traverse_job_qualities(ad['_source']['skills'], 'skills')
+                auranestRepro.traverse_job_qualities(ad['_source']['traits'], 'traits')
+                print
+                # print(ad['_source']['skills'])
+                # print(ad['_source']['traits'])
+        print(auranestRepro.quality_sorter('skills'))
+        print(auranestRepro.quality_sorter('traits'))
+        return 'hello skills'

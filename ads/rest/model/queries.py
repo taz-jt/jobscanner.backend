@@ -11,3 +11,12 @@ allJobs_query.add_argument(settings.LIMIT,
                             default=10)
 allJobs_query.add_argument(settings.SHOW_EXPIRED, choices=['true', 'false'], default='false')
 allJobs_query.add_argument(settings.PLACE, action='append')
+
+
+skillsandtraits_query = reqparse.RequestParser()
+skillsandtraits_query.add_argument('q', required=True,
+                                   location='args',
+                                   help="Must provide an occupation name!")
+
+skillsandtraits_query.add_argument(settings.SHOW_EXPIRED, choices=['true', 'false'], default='false')
+skillsandtraits_query.add_argument(settings.PLACE, action='append')

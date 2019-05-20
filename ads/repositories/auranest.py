@@ -130,3 +130,47 @@ def __freetext_fields(searchword):
             }
         }
     ]
+
+
+# Check and evaluate methods for skills and traits of an occupation
+
+skills = {}
+traits = {}
+
+
+def validate_list(l):
+    return True if (isinstance(l, list) and len(l) > 0) else False
+
+
+def traverse_job_qualities(qualities, quality_type):
+    if not validate_list(qualities):
+        return "No list found"
+    else:
+        for q in qualities:
+            quality_assembler(q, quality_type)
+
+        return skills if quality_type == 'skills' else traits
+
+
+def quality_assembler(quality, quality_type):
+    if not isinstance(quality, str):
+        return 'Wrong value'
+
+    if quality_type == 'skills':
+        if quality not in skills:
+            skills[quality] = 0
+        else:
+            skills[quality] += 1
+    else:
+        if quality not in traits:
+            traits[quality] = 0
+        else:
+            traits[quality] += 1
+
+
+def quality_sorter(qualities):
+    if qualities == 'skills':
+        return sorted(skills, key=skills.get)
+    else:
+        return sorted(traits, key=traits.get)
+
