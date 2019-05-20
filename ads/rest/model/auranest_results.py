@@ -80,3 +80,13 @@ auranest_lista = api.model('Ads', {
     }, attribute='aggregations', skip_none=True),
     'hits': fields.List(fields.Nested(annons), attribute='hits.hits')
 })
+
+quality_value = api.model('QualityValue', {
+    'name': fields.String,
+    'freq': fields.Float
+})
+
+auranest_listb = api.model('SkillnTrait', {
+    'skills': fields.List(fields.Nested(quality_value)),
+    'traits': fields.List(fields.Nested(quality_value))
+})

@@ -4,6 +4,7 @@ from flask_restplus import abort
 from elasticsearch import exceptions
 from ads import settings
 from ads.repositories import elastic
+from collections import OrderedDict
 
 
 log = logging.getLogger(__name__)
@@ -134,8 +135,11 @@ def __freetext_fields(searchword):
 
 # Check and evaluate methods for skills and traits of an occupation
 
-skills = {}
-traits = {}
+
+def initialize():
+    global skills, traits
+    skills = {}
+    traits = {}
 
 
 def validate_list(l):
@@ -144,33 +148,41 @@ def validate_list(l):
 
 def traverse_job_qualities(qualities, quality_type):
     if not validate_list(qualities):
-        return "No list found"
+        pass
     else:
         for q in qualities:
             quality_assembler(q, quality_type)
 
-        return skills if quality_type == 'skills' else traits
-
 
 def quality_assembler(quality, quality_type):
+
     if not isinstance(quality, str):
         return 'Wrong value'
 
     if quality_type == 'skills':
         if quality not in skills:
-            skills[quality] = 0
+            skills[quality] = 1
         else:
             skills[quality] += 1
     else:
         if quality not in traits:
-            traits[quality] = 0
+            traits[quality] = 1
         else:
             traits[quality] += 1
 
 
 def quality_sorter(qualities):
+    l = ()
     if qualities == 'skills':
-        return sorted(skills, key=skills.get)
+        return dict(sorted(skills.items(), key=lambda t: t[1], reverse=True))
     else:
-        return sorted(traits, key=traits.get)
+        return dict(sorted(traits.items(), key=lambda t: t[1], reverse=True))
 
+
+def quality_formatter(qualities):
+    l = []
+    totalQ = len(qualities)
+    for k, v in qualities.items():
+        l.append({'name': k, 'freq': round(v/totalQ, 2)})
+
+    return l
