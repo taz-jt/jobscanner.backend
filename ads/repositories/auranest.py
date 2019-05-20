@@ -155,7 +155,6 @@ def traverse_job_qualities(qualities, quality_type):
 
 
 def quality_assembler(quality, quality_type):
-
     if not isinstance(quality, str):
         return 'Wrong value'
 
