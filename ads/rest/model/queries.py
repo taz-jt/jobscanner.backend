@@ -19,5 +19,4 @@ skillsandtraits_query.add_argument('q', required=True,
                                    help="Must provide an occupation name!")
 skillsandtraits_query.add_argument(settings.LIMIT,
                             type=inputs.int_range(0, settings.MAX_LIMIT))
-skillsandtraits_query.add_argument(settings.SHOW_EXPIRED, choices=['true', 'false'], default='false')
 skillsandtraits_query.add_argument(settings.PLACE, action='append')
