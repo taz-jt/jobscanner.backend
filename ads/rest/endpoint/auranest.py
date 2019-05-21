@@ -36,6 +36,8 @@ class SkillsAndTraitsSearch(Resource):
     @ns_skillsandtraits.expect(queries.skillsandtraits_query)
     def get(self):
         args = queries.skillsandtraits_query.parse_args()
+        limit = -1 if args['limit'] is None else args['limit']
+        del args['limit']
         query_result = auranestRepro.findAds(args)
         auranestRepro.initialize()
         for ad in query_result['hits']['hits']:
@@ -45,8 +47,8 @@ class SkillsAndTraitsSearch(Resource):
                 auranestRepro.traverse_job_qualities(ad['_source']['traits'], 'traits')
 
         return self.marshal_default({
-            'skills': auranestRepro.quality_formatter(auranestRepro.quality_sorter('skills')),
-            'traits': auranestRepro.quality_formatter(auranestRepro.quality_sorter('traits'))
+            'skills': auranestRepro.quality_formatter(auranestRepro.quality_sorter('skills'))[:limit],
+            'traits': auranestRepro.quality_formatter(auranestRepro.quality_sorter('traits'))[:limit]
         })
 
     @ns_skillsandtraits.marshal_with(auranest_listb)
