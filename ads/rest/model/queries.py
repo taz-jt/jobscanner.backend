@@ -20,3 +20,12 @@ skillsandtraits_query.add_argument('q', required=True,
 skillsandtraits_query.add_argument(settings.LIMIT,
                             type=inputs.int_range(0, settings.MAX_LIMIT))
 skillsandtraits_query.add_argument(settings.PLACE, action='append')
+
+# heat map api's queries
+heatmap_query = reqparse.RequestParser()
+heatmap_query.add_argument('q',
+                           location='args', help='Must provide an occupation name')
+heatmap_query.add_argument(settings.LIMIT, default=settings.MAX_LIMIT)
+heatmap_query.add_argument(settings.OFFSET,
+                           type=inputs.int_range(0, settings.MAX_OFFSET),
+                           default=settings.MAX_OFFSET)

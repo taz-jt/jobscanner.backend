@@ -5,6 +5,7 @@ from ads.rest import api
 import logging
 # Import all Resources that are to be made visible for the app
 from ads.rest.endpoint.auranest import AllJobsSearch
+from ads.rest.endpoint.heatmap import Heatmap
 
 app = Flask(__name__)
 CORS(app)
