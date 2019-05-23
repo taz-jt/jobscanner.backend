@@ -1,0 +1,57 @@
+from flask_restplus import Resource, fields
+from ads.rest import ns_heatmap
+from ads.repositories import auranest as auranestRepro
+from ads.rest.model import queries
+from ads.rest.model.auranest_results import auranest_listc
+
+from ads.apiresources import geokomp, geotrasform
+import requests
+
+
+@ns_heatmap.route('')
+class Heatmap(Resource):
+    @ns_heatmap.doc(description='Find heat map of a specific job')
+    @ns_heatmap.expect(queries.heatmap_query)
+    def get(self):
+        features = []
+        args = queries.allJobs_query.parse_args()
+        query_result=auranestRepro.findAds(args)
+
+        # GeoKomp add location
+        httpSession=requests.Session()
+        for ad in query_result['hits']['hits']:
+            if ad['_source']['location']:
+                ad['_source']['geolocation'] = {'lat': 0, 'lng': 0}
+                coord = geokomp.getGeoLocation(ad['_source']['location']['translations']['sv-SE'], httpSession)
+                ad['_source']['geolocation']['lng'] = coord['lng']  # y
+                ad['_source']['geolocation']['lat'] = coord['lat']  # x
+                if coord['lng'] and coord['lat']:
+                    x, y = geotrasform.transform_coord_3857(coord['lat'], coord['lng'])
+                    features.append({
+                        'type': 'Feature',
+                        'id': ad['_source']['id'],
+                        'geometry': {
+                            'type': 'Point',
+                            'coordinates': [x, y]
+                        }
+                    })
+
+        httpSession.close()
+        res = {
+            'type': 'FeatureCollection',
+            'totalFeatures': len(features),
+            'features': features,
+            "crs": {
+                "type": "name",
+                "properties": {
+                    "name": "urn:ogc:def:crs:EPSG::3857"
+                }
+            }
+        }
+
+        return self.marshal_default(res)
+
+    @ns_heatmap.marshal_with(auranest_listc)
+    def marshal_default(self, results):
+        return results
+

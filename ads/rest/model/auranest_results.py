@@ -90,3 +90,25 @@ auranest_listb = api.model('SkillnTrait', {
     'skills': fields.List(fields.Nested(quality_value)),
     'traits': fields.List(fields.Nested(quality_value))
 })
+
+
+feature_value = api.model('FeatureValue', {
+    'type': fields.String,
+    'id': fields.String,
+    'geometry': fields.Nested({
+        'type': fields.String,
+        'coordinates': fields.List(fields.String)
+    })
+})
+
+auranest_listc = api.model('SpecificJobHeatMap', {
+    'type': fields.String,
+    'totalFeatures': fields.String,
+    'features': fields.List(fields.Nested(feature_value)),
+    "crs": fields.Nested({
+        "type": fields.String,
+        "properties": fields.Nested({
+            "name": fields.String
+        })
+    })
+})
