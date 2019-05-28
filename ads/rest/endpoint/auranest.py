@@ -1,5 +1,5 @@
 from flask_restplus import Resource, fields
-from ads.rest import ns_alljobs, ns_skillsandtraits, ns_heatmap
+from ads.rest import ns_alljobs, ns_skillsandtraits
 from ads.repositories import auranest as auranestRepro
 from ads.rest.model import queries
 from ads.rest.model.auranest_results import auranest_lista, auranest_listb
@@ -56,13 +56,3 @@ class SkillsAndTraitsSearch(Resource):
     @ns_skillsandtraits.marshal_with(auranest_listb)
     def marshal_default(self, results):
         return results
-
-
-'''
-@ns_heatmap.route('heatmap')
-class Heatmap(Resource):
-    @ns_heatmap.doc(description='Find heat map of a specific job')
-    @ns_heatmap.expect(queries.heatmap_query)
-    def get(self):
-        return 'hello heatmap'
-'''
