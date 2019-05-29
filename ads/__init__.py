@@ -6,8 +6,7 @@ import logging
 # Import all Resources that are to be made visible for the app
 from ads.rest.endpoint.auranest import AllJobsSearch
 from ads.rest.endpoint.job_geolocation import JobGeoLocation
-from ads.rest.endpoint.jobcount import JobCount
-from ads.rest.endpoint.geo_jobcount import GeoJobCount
+from ads.rest.endpoint.job_geocount import JobGeoCount
 
 app = Flask(__name__)
 CORS(app)

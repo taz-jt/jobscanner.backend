@@ -1,17 +1,16 @@
 from flask_restplus import Resource, fields
-from ads.rest import ns_geojobcount
+from ads.rest import ns_jobgeocount
 from ads.repositories import auranest as auranestRepro
 from ads.rest.model import queries
-from ads.rest.model.auranest_results import auranest_lista, auranest_listb
-from ads.apiresources import geokomp
+from ads.rest.model.auranest_results import auranest_listd
 import requests
 from ads.apiresources import helper
 
 
-@ns_geojobcount.route('')
-class GeoJobCount(Resource):
-    @ns_geojobcount.doc(description='get job count for a free text query')
-    @ns_geojobcount.expect(queries.job_query)
+@ns_jobgeocount.route('')
+class JobGeoCount(Resource):
+    @ns_jobgeocount.doc(description='get job count for a free text query')
+    @ns_jobgeocount.expect(queries.job_query)
     def get(self):
         args = queries.allJobs_query.parse_args()
         query_result = auranestRepro.findAds(args)
@@ -28,5 +27,9 @@ class GeoJobCount(Resource):
                 loc = helper.get_location_data('POSTORT', loc_text, httpSession)
                 loc_resp = helper.location_response_builder(loc_resp, loc)
         httpSession.close()
-        loc_resp['total'] = len(loc_resp['lan'])
-        return 'hello geo-job-count'
+        loc_resp['total'] = helper.get_total_jobCount(loc_resp['lan'])
+        return self.marshal_default(loc_resp)
+
+    @ns_jobgeocount.marshal_with(auranest_listd)
+    def marshal_default(self, results):
+        return results

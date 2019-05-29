@@ -14,7 +14,6 @@ def get_location_data(type, location, reqSession):
 
 def location_response_builder(resp, loc):
     match_lan_index = check_value_exist(loc['lankod'], resp['lan'], 'lankod')
-    print(match_lan_index, loc['lankod'], resp['lan'], sep=' -- ')
     if match_lan_index < 0:
         lan = {
             'lannamn': loc['lannamn'],
@@ -52,3 +51,10 @@ def check_value_exist(value, ref_list, check_value):
             if ref[check_value] == value:
                 return index
         return -1
+
+
+def get_total_jobCount(lan_jobs):
+    total = 0
+    for job in lan_jobs:
+        total += job['lan_job_total']
+    return total

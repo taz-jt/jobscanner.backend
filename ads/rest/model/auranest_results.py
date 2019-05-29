@@ -101,8 +101,27 @@ feature_value = api.model('FeatureValue', {
     })
 })
 
-auranest_listc = api.model('SpecificJobHeatMap', {
+auranest_listc = api.model('SpecificJobGeoLocation', {
     'type': fields.String,
     'totalFeatures': fields.String,
     'features': fields.List(fields.Nested(feature_value))
+})
+
+# geo-jobcount response model
+kommun_value = api.model('KommunValue', {
+    'kommunnamn': fields.String,
+    'kommunkod': fields.String,
+    'kommun_job_total': fields.Integer
+})
+
+lan_value = api.model('LanVale', {
+    'lannamn': fields.String,
+    'lankod': fields.String,
+    'lan_job_total': fields.Integer,
+    'kommun': fields.List(fields.Nested(kommun_value))
+})
+
+auranest_listd = api.model('SpecificJobGeoCount', {
+    'total': fields.Integer,
+    'lan': fields.List(fields.Nested(lan_value))
 })

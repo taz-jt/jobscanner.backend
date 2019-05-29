@@ -15,14 +15,11 @@ ns_skillsandtraits = Namespace('Skills and Traits',
 ns_jobgeolocation = Namespace('Job location for a specific job',
                        description='Generate job location for a specific job')
 
-ns_geojobcount = Namespace('Job count per kommun or lan',
+ns_jobgeocount = Namespace('Job count per kommun or lan',
                            description='Job count per kommun or lan for a specific job')
 
-ns_jobcount = Namespace('Specific job count',
-                        description='specific job count for every lan and kommun')
 
 api.add_namespace(ns_alljobs, '/')
 api.add_namespace(ns_skillsandtraits, '/')
 api.add_namespace(ns_jobgeolocation, '/job-geolocation')
-api.add_namespace(ns_jobcount, '/jobcount')
-api.add_namespace(ns_geojobcount, '/geo-jobcount')
+api.add_namespace(ns_jobgeocount, '/job-geocount')
