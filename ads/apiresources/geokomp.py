@@ -24,7 +24,6 @@ def __setCoordinate(aObject):
     coordinates = {'lat': aObject['koordinater']['WGS84']['x'], 'lng': aObject['koordinater']['WGS84']['y']}
     return coordinates
 
-
 def makeGeoLocationReq(location, reqSession):
     geokomp_URL = "http://www.arbetsformedlingen.se:80/rest/geo/rest"
     friText_path = '/v1/fritext'
