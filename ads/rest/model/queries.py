@@ -31,3 +31,11 @@ heatmap_query.add_argument(settings.LIMIT,
 heatmap_query.add_argument(settings.OFFSET, default=0)
 
 
+# job count api's queries
+jobcount_query = reqparse.RequestParser()
+jobcount_query.add_argument('q', required=True,
+                           location='args', help='Must provide an occupation name')
+jobcount_query.add_argument(settings.LIMIT,
+                           type=inputs.int_range(0, settings.MAX_LIMIT),
+                           default=10)
+jobcount_query.add_argument(settings.OFFSET, default=0)
