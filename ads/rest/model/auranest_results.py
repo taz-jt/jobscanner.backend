@@ -104,11 +104,5 @@ feature_value = api.model('FeatureValue', {
 auranest_listc = api.model('SpecificJobHeatMap', {
     'type': fields.String,
     'totalFeatures': fields.String,
-    'features': fields.List(fields.Nested(feature_value)),
-    "crs": fields.Nested({
-        "type": fields.String,
-        "properties": fields.Nested({
-            "name": fields.String
-        })
-    })
+    'features': fields.List(fields.Nested(feature_value))
 })
