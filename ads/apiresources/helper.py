@@ -4,12 +4,16 @@ location_cache = {}
 
 
 def get_location_data(type, location, reqSession):
-    if location not in location_cache:
+    if location in location_cache:
+        return location_cache[location]
+    else:
         loc_resp = geokomp.makeGeoLocationReq(location, reqSession)
         loc = list(filter(lambda l: l['typ'] == type, loc_resp))
-        location_cache[location] = loc[0]
-
-    return location_cache[location]
+        if len(loc):
+            location_cache[location] = loc[0]
+            return location_cache[location]
+        else:
+            return ""
 
 
 def location_response_builder(resp, loc):

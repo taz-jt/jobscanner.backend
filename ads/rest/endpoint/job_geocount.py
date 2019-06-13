@@ -25,7 +25,8 @@ class JobGeoCount(Resource):
             if ad['_source']['location']:
                 loc_text = ad['_source']['location']['translations']['sv-SE']
                 loc = helper.get_location_data('POSTORT', loc_text, httpSession)
-                loc_resp = helper.location_response_builder(loc_resp, loc)
+                if len(loc):
+                    loc_resp = helper.location_response_builder(loc_resp, loc)
         httpSession.close()
         loc_resp['total'] = helper.get_total_jobCount(loc_resp['lan'])
         return self.marshal_default(loc_resp)
