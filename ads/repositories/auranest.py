@@ -1,5 +1,6 @@
 import logging
 import json
+from datetime import datetime
 from flask_restplus import abort
 from elasticsearch import exceptions
 from ads import settings
@@ -19,7 +20,7 @@ def findAds(args):
     query_dsl['aggs'] = {"total": {"cardinality": {"field": "group.id"}}}
     # if aggregates:
     #    query_dsl['aggs'].update(aggregates)
-    log.debug(json.dumps(query_dsl, indent=2))
+    # log.debug(json.dumps(query_dsl, indent=2))
     try:
         query_result = elastic.search(index=settings.ES_AURANEST, body=query_dsl)
     except exceptions.ConnectionError as e:
@@ -67,9 +68,11 @@ def _parse_args(args):
     }
     # Allways remove all expired job ads
     if(args[settings.SHOW_EXPIRED]=='false'):
-        query_dsl['query']['bool']['filter'] = \
-           [{'bool': {'must_not': {'exists': {'field': 'source.removedAt'}}}}]
-    #TODO: Filter on 'deadline' show or not show (en växel)
+        print(datetime.date(datetime.now()))
+        query_dsl['query']['bool']['filter'] = [
+            {'range': {'source.removedAt': {'gte': datetime.date(datetime.now())}}}
+        ]
+    # TODO: Filter on 'deadline' show or not show (en växel)
     # Check for empty query
     if not any(v is not None for v in args.values()):
         log.debug("Constructing match-all query")
