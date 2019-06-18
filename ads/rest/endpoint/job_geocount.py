@@ -13,6 +13,7 @@ class JobGeoCount(Resource):
     @ns_jobgeocount.expect(queries.job_query)
     def get(self):
         args = queries.allJobs_query.parse_args()
+        args['show-expired'] = 'false'
         query_result = auranestRepro.findAds(args)
 
         loc_resp = {

@@ -39,7 +39,7 @@ class SkillsAndTraitsSearch(Resource):
         limit = -1 if args['limit'] is None else args['limit']
         del args['limit']
         #todo: show-expired is not in the query we have to set it (perhaps a trmporary issue)
-        args['show-expired'] = 'false'
+        args['show-expired'] = 'true'
         query_result = auranestRepro.findAds(args)
         auranestRepro.initialize()
         for ad in query_result['hits']['hits']:

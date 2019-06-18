@@ -15,6 +15,7 @@ class JobGeoLocation(Resource):
     def get(self):
         features = []
         args = queries.allJobs_query.parse_args()
+        args['show-expired'] = 'false'
         query_result=auranestRepro.findAds(args)
 
         # GeoKomp add location
