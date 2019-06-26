@@ -114,7 +114,7 @@ def _build_query(querystring, fields_method):
 def __place_fields(searchword):
     return [
         {
-            "match": {
+            "match_phrase": {
                 "location.translations.sv-SE": searchword,
             }
         }
